@@ -17,7 +17,7 @@
         {%- for column in columns -%}
             {%- set col_expression -%}
                 {%- if is_csv -%}nullif(${{loop.index}},''){# special case: get columns by ordinal position #}
-                {%- else -%} get_ignore_case($1, {{column.name}}) {# standard behavior: get columns by name #}
+                {%- else -%}nullif(${{column.name}},''){# standard behavior: get columns by name #}
                 {%- endif -%}
             {%- endset -%}
             {{col_expression}}::{{column.data_type}} as {{column.name}},
@@ -29,6 +29,7 @@
         from {{external.location}} {# stage #}
     )
     file_format = {{external.file_format}}
+    match_by_column_name = CASE_INSENSITIVE
     {% if external.pattern -%} pattern = '{{external.pattern}}' {%- endif %}
     {% if copy_options %} {{copy_options}} {% endif %};
     
