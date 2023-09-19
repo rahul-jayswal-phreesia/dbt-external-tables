@@ -28,7 +28,6 @@
             current_timestamp::timestamp as _dbt_copied_at
         from {{external.location}} {# stage #}
     )
-    cluster by (to_Date(_dbt_copied_at))
     file_format = {{external.file_format}}
     {% if external.pattern -%} pattern = '{{external.pattern}}' {%- endif %}
     {% if copy_options %} {{copy_options}} {% endif %};
