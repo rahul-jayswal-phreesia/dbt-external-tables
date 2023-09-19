@@ -13,6 +13,7 @@
             metadata_filename varchar,
             metadata_file_row_number bigint,
             _dbt_copied_at timestamp
-    );
+    )
+    cluster by (to_Date(_dbt_copied_at));
 
 {% endmacro %}
