@@ -17,7 +17,12 @@
         {%- for column in columns -%}
             {%- set col_expression -%}
                 {%- if is_csv -%}nullif(${{loop.index}},''){# special case: get columns by ordinal position #}
-                {%- else -%}Nullif(get_ignore_case($1, '{{column.name}}'),''){# standard behavior: get columns by name #}
+                {%- else -%}
+                    {% if column.data_type == 'TEXT' %}
+                        UPPER(Nullif(get_ignore_case($1, '{{column.name}}'),'')){# standard behavior: get columns by name #}
+                    {%- else -%}
+                        Nullif(get_ignore_case($1, '{{column.name}}'),''){# standard behavior: get columns by name #}
+                    {%- endif -%}
                 {%- endif -%}
             {%- endset -%}
             {{col_expression}}::{{column.data_type}} as {{column.name}},
