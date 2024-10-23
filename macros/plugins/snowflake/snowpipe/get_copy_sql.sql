@@ -21,7 +21,7 @@
                     {% if column.data_type == 'TEXT' %}
                         UPPER(Nullif(get_ignore_case($1, '{{column.name}}'),'')){# standard behavior: get columns by name #}
                     {%- else -%}
-                        Nullif(get_ignore_case($1, '{{column.name}}'),''){# standard behavior: get columns by name #}
+                        Nullif(get_ignore_case($1, '{{column.name | replace("\"", "")}}'),''){# standard behavior: get columns by name #}
                     {%- endif -%}
                 {%- endif -%}
             {%- endset -%}
